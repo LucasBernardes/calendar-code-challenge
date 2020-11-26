@@ -1,13 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import './styles.css';
 
 function Calendar() {
   const [monthOffset, setMonthOffset] = useState(0)
   const currentMonth = moment().add(monthOffset, 'months');
-  const currentMonthDates = new Array(currentMonth.daysInMonth()).fill(null).map((x, i) => currentMonth.startOf('month').add(i, 'days'));
+  const lastMonth = moment().add(monthOffset - 1, 'months');
+  const nextMonth = moment().add(monthOffset + 1, 'months');
+  // const currentMonthDates = new Array(currentMonth.daysInMonth()).fill(null).map((x, i) => currentMonth.startOf('month').add(i, 'days'));
+  const currentMonthDates = new Array(moment().daysInMonth()).fill(null).map((x, i) => moment().startOf('month').add(i, 'days'));
   const weekArray = moment.weekdays()
   
+  const events = [
+    {
+      name: 'Consulta médico',
+      hour: '13:00',
+    },{
+      name: 'Lavar carro',
+      hour: '17:00',
+    }
+  ];
+
+  const RenderEvents = () => {
+    return (
+      <div className="calendar-event-wrapper">
+        {
+          events.map((event) => {
+            return (
+              <div className="calendar-event-item">
+                <span class="event-circle"></span>
+                  {event.name}
+                <span class="event-hour">{event.hour}</span>
+              </div>
+            );
+          })
+        }
+      </div>
+    );
+  }
+
   const MonthChooserHeader = () => {
     return (
       <div className="calendar-chooser-header">
@@ -20,7 +51,6 @@ function Calendar() {
         </div>
       </div>
     );
-    
   }
 
   const HeaderCalendar = () => {
@@ -51,7 +81,10 @@ function Calendar() {
             return (
               <div className="calendar-item-wrapper" key={date.date()}>
                 <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
-                  {date.date()}
+                  <div className="event-date-number">
+                    {date.date()}
+                  </div>
+                  <RenderEvents />
                 </div>
                 
                 {/* <>

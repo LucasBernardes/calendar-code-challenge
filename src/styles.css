@@ -11,12 +11,12 @@
     height: 200;
     width: 13.7%;
     min-height: 20%;
-    /* background-color: blue; */
     padding-left: 10px;
 }
 
 .calendar-item {
     display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
     color: gray;
@@ -29,6 +29,7 @@
 
 .weekend {
     display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
     border-color: black;
@@ -52,4 +53,45 @@
     color: red;
     justify-content: center;
     padding-top: 10px;
+}
+
+.calendar-event-wrapper {
+    margin-top: 20px;
+    width: 100%;
+    height: 100%;
+    /* background-color: pink; */
+}
+
+.calendar-event-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    /* background-color: blue; */
+    padding: 0 0 0 0;
+    margin-bottom: 2px;
+    font-weight: 600;
+    font-size: 12px;
+    width: 100%;
+}
+
+.event-date-number {
+    text-align: left;
+    font-weight: bolder !important;
+}
+
+.event-circle {
+    margin-top: 5px;
+    margin-right: 5px;
+    height: 6px;
+    width: 6px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.event-hour {
+    align-self: flex-end;
+    /* float: right; */
+    width: 50px;
+    height: 20px;
 }
