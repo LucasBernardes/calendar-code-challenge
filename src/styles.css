@@ -1,0 +1,55 @@
+.calendar-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100vh;
+    /* background-color: red; */
+}
+
+.calendar-item-wrapper {
+    display: flex;
+    height: 200;
+    width: 13.7%;
+    min-height: 20%;
+    /* background-color: blue; */
+    padding-left: 10px;
+}
+
+.calendar-item {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    color: gray;
+    border-top-style: solid;
+    border-top-style: solid;
+    border-width: 1;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.weekend {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    border-color: black;
+    border-top-style: solid;
+    border-top-style: solid;
+    border-width: 1;
+    background-color: rgb(246,246,246);
+}
+
+.calendar-week-header {
+    display: flex;
+    height: 25;
+    width: 100%;
+    color: gray;
+}
+
+.calendar-chooser-header {
+    display: flex;
+    height: 35px;
+    width: 100%;
+    color: red;
+    justify-content: center;
+    padding-top: 10px;
+}
