@@ -9,7 +9,7 @@ function Calendar() {
   const lastMonth = moment().add(monthOffset - 1, 'months');
   const nextMonth = moment().add(monthOffset + 1, 'months');
   // const currentMonthDates = new Array(currentMonth.daysInMonth()).fill(null).map((x, i) => currentMonth.startOf('month').add(i, 'days'));
-  let currentMonthDates = Array.from({length: moment().add(1,'months').daysInMonth()}, (x, i) => moment().add(1,'months').startOf('month').add(i, 'days'));
+  let currentMonthDates = Array.from({length: moment().daysInMonth()}, (x, i) => moment().startOf('month').add(i, 'days'));
   const weekArray = moment.weekdays()
 
   const getDaysByMonth = (month) => {
