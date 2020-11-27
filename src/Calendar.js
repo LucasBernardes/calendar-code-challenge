@@ -15,10 +15,35 @@ function Calendar() {
     {
       name: 'Consulta médico',
       hour: '13:00',
-    },{
+    },
+    {
       name: 'Lavar carro',
       hour: '17:00',
-    }
+    },
+    {
+      name: 'Cachorro Petshop',
+      hour: '12:00',
+    },
+    {
+      name: 'Entregar Trabalho',
+      hour: '17:00',
+    },
+    {
+      name: 'Consulta médico',
+      hour: '13:00',
+    },
+    // {
+    //   name: 'Lavar carro',
+    //   hour: '17:00',
+    // },
+    // {
+    //   name: 'Cachorro Petshop',
+    //   hour: '12:00',
+    // },
+    // {
+    //   name: 'Entregar Trabalho',
+    //   hour: '17:00',
+    // }
   ];
 
   const RenderEvents = () => {
@@ -29,7 +54,9 @@ function Calendar() {
             return (
               <div className="calendar-event-item">
                 <span class="event-circle"></span>
+                <span className="event-title">
                   {event.name}
+                </span>
                 <span class="event-hour">{event.hour}</span>
               </div>
             );
@@ -59,7 +86,7 @@ function Calendar() {
         {
           weekArray.map((weekdayItem) => {
             return (
-              <div key={weekdayItem} className="calendar-week-header">
+              <div key={weekdayItem} className="calendar-week-header" style={{ paddingLeft: 1 }}>
                 {weekdayItem}
               </div>
             );
