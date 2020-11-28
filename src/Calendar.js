@@ -4,31 +4,52 @@ import './styles.css';
 import { fireEvent } from '@testing-library/react';
 
 function Calendar() {
-  const [monthOffset, setMonthOffset] = useState(1)
-  const currentMonth = moment().add(monthOffset, 'months');
-  const lastMonth = moment().add(monthOffset - 1, 'months');
-  const nextMonth = moment().add(monthOffset + 1, 'months');
+  const [monthOffset, setMonthOffset] = useState(0)
+  const [currentMonth, setCurrentMonth] = useState(moment().add(0, 'months'))
+  // const [lastMonth, setLastMonth] = useState(Array.from({length: moment().add(monthOffset - 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset - 1,'months').startOf('month').add(i, 'days')))
+  const [nextMonth, setNextMonth] = useState(Array.from({length: moment().add(monthOffset + 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset + 1,'months').startOf('month').add(i, 'days')))
+  const [currentMonthDates, setCurrentMonthDates] = useState(Array.from({length: moment().add(monthOffset,'months').daysInMonth()}, (x, i) => moment().add(monthOffset,'months').startOf('month').add(i, 'days')))
+  // const lastMonth = moment().add(monthOffset - 1, 'months');
+  // const nextMonth = moment().add(monthOffset + 1, 'months');
   // const currentMonthDates = new Array(currentMonth.daysInMonth()).fill(null).map((x, i) => currentMonth.startOf('month').add(i, 'days'));
-  let currentMonthDates = Array.from({length: moment().daysInMonth()}, (x, i) => moment().startOf('month').add(i, 'days'));
   const weekArray = moment.weekdays()
 
-  const getDaysByMonth = (month) => {
-    console.log('month', month)
-    const daysInMonth = moment(month).daysInMonth();
-    return Array.from({length: daysInMonth}, (v, k) => k + 1)
-  };
+  // useEffect(() => {
+  //   currentMonthDates = [];
+  // },[monthOffset])
 
-  console.log('mudou currentMonthDates', currentMonthDates[0].day())
-  const date = currentMonthDates[0].day();
-  if(date > 0) {
-    for (var i = 0; i < date; i++) {
-      currentMonthDates.unshift(moment().add(i + 1, 'months'))
-    }
-  }
-  while(currentMonthDates.length < 35) {
-    currentMonthDates.push(moment())
-  }
-  console.log(currentMonthDates)
+  // const getDaysByMonth = (month) => {
+  //   console.log('month', month)
+  //   const daysInMonth = moment(month).daysInMonth();
+  //   return Array.from({length: daysInMonth}, (v, k) => k + 1)
+  // };
+
+  useEffect(() => {
+    // setCurrentMonth(moment().add(monthOffset, 'months'));
+    // setNextMonth(Array.from({length: moment().add(monthOffset + 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset + 1,'months').startOf('month').add(i, 'days')));
+    // setCurrentMonthDates(Array.from({length: moment().add(monthOffset,'months').daysInMonth()}, (x, i) => moment().add(monthOffset,'months').startOf('month').add(i, 'days')));
+  },[monthOffset])
+
+  
+  
+  useEffect(() => {
+    // console.log('mudou currentMonthDates', currentMonthDates[0].day())
+    // const date = currentMonthDates[0].day();
+    // if(date > 0) {
+    //   for (var i = 0; i < date; i++) {
+    //     currentMonthDates.unshift(currentMonthDates[0].add(i - 1, 'days'))
+    //   }
+    // }
+    // let auxArray = []
+    // if(currentMonthDates.length +  auxArray.length < 35) {
+    //   console.log(currentMonthDates.length)
+    //   setCurrentMonthDates(currentMonthDates.concat(nextMonth.slice(0, 35 - currentMonthDates.length)));
+    // }
+    
+    //setCurrentMonthDates(currentMonthDates.concat(auxArray))
+    //console.log(auxArray)
+  },[])
+  
 
   
 
@@ -116,7 +137,7 @@ function Calendar() {
       </div>
     );
   }
-  console.log(currentMonthDates)
+  // console.log(currentMonthDates)
   return (
     <>
       <MonthChooserHeader />
@@ -124,7 +145,8 @@ function Calendar() {
       <div className="calendar-wrapper">
         {
           currentMonthDates.map((date) => {
-            console.log(date)
+            // console.log(date)
+            // console.log(date.format('L'))
             return (
               <div className="calendar-item-wrapper" key={date.format('L')}>
                 <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
