@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import moment from 'moment';
 import Modal from './Modal';
 import './styles.css';
 
+
 function Calendar() {
   const events = useSelector(state => state.data);
+  const selectedDate = useSelector(state => state.selectedDate);
   const [addNewEventVisible, setAddNewEventVisible] = useState(false)
   const [monthOffset, setMonthOffset] = useState(0)
   const [currentMonth, setCurrentMonth] = useState(moment().add(0, 'months'))
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const dispatch = useDispatch();
   // const [lastMonth, setLastMonth] = useState(Array.from({length: moment().add(monthOffset - 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset - 1,'months').startOf('month').add(i, 'days')))
   const [nextMonth, setNextMonth] = useState(Array.from({length: moment().add(monthOffset + 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset + 1,'months').startOf('month').add(i, 'days')))
   const [currentMonthDates, setCurrentMonthDates] = useState(Array.from({length: moment().add(monthOffset,'months').daysInMonth()}, (x, i) => moment().add(monthOffset,'months').startOf('month').add(i, 'days')))
@@ -19,9 +22,23 @@ function Calendar() {
   // const currentMonthDates = new Array(currentMonth.daysInMonth()).fill(null).map((x, i) => currentMonth.startOf('month').add(i, 'days'));
   const weekArray = moment.weekdays()
 
+
+  useEffect(() => {
+    if (!addNewEventVisible) {
+      dispatch({
+        type: 'SELECTED_DATE',
+        data: '',
+      })
+    }
+  },[addNewEventVisible])
+
   useEffect(() => {
     console.log(events)
   },[events])
+
+  useEffect(() => {
+    console.log(selectedDate)
+  },[selectedDate])
   // useEffect(() => {
   //   currentMonthDates = [];
   // },[monthOffset])
@@ -60,18 +77,15 @@ function Calendar() {
 
   const RenderEvents = (props) => {
     const currentDate = props.date.format('DD/MM/YYYY');
-    console.log(currentDate)
     return (
       <div className="calendar-event-wrapper">
-        {console.log(events)}
         {
-          
-          events[currentDate] && events[currentDate].map((event) => {
+          events && events[currentDate] && events[currentDate].map((event, index) => {
             return (
-              <div key={event.hour} className="calendar-event-item">
+              <div key={event.hour} className="calendar-event-item" onClick={() => handleEventClick(props.date.format('DD/MM/YYYY'), index)}>
                 <span className="event-circle"></span>
                 <span className="event-title">
-                  {event.name && event.name}
+                  {event.title && event.title}
                   {/* Nome do evento */}
                 </span>
                 {/* <span className="event-hour">{event.hour && event.hour}</span> */}
@@ -114,10 +128,25 @@ function Calendar() {
     );
   }
   // console.log(currentMonthDates)
-  const handleDateClick = (index) => {
-    setSelectedIndex(index)
+  const handleDateClick = (date) => {
+    dispatch({
+      type: 'SELECTED_DATE',
+      data: { date },
+    })
+    setSelectedIndex(date)
     setAddNewEventVisible(true)
   }
+
+  const handleEventClick = (date, index) => {
+    dispatch({
+      type: 'REMOVE_EVENT',
+      data: {
+        date,
+        index,
+      }
+    })
+  }
+
   return (
     <>
       <MonthChooserHeader />
@@ -125,7 +154,7 @@ function Calendar() {
       <Modal
         setAddNewEventVisible={setAddNewEventVisible}
         addNewEventVisible={addNewEventVisible}
-        selectedElement={events[setSelectedIndex] && events[setSelectedIndex]}
+        // selectedElement={events[setSelectedIndex] && events[setSelectedIndex]}
       />
       <div className="calendar-wrapper">
         {
