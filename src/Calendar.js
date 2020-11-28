@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import moment from 'moment';
 import Modal from './Modal';
 import './styles.css';
 
 function Calendar() {
+  const events = useSelector(state => state.data);
   const [addNewEventVisible, setAddNewEventVisible] = useState(false)
   const [monthOffset, setMonthOffset] = useState(0)
   const [currentMonth, setCurrentMonth] = useState(moment().add(0, 'months'))
@@ -16,6 +19,9 @@ function Calendar() {
   // const currentMonthDates = new Array(currentMonth.daysInMonth()).fill(null).map((x, i) => currentMonth.startOf('month').add(i, 'days'));
   const weekArray = moment.weekdays()
 
+  useEffect(() => {
+    console.log(events)
+  },[events])
   // useEffect(() => {
   //   currentMonthDates = [];
   // },[monthOffset])
@@ -51,56 +57,24 @@ function Calendar() {
     //setCurrentMonthDates(currentMonthDates.concat(auxArray))
     //console.log(auxArray)
   },[])
-  
 
-  
-
-  const events = [
-    {
-      name: 'Consulta médico',
-      hour: '13:00',
-    },
-    {
-      name: 'Lavar carro',
-      hour: '17:00',
-    },
-    {
-      name: 'Cachorro Petshop',
-      hour: '12:00',
-    },
-    {
-      name: 'Entregar Trabalho',
-      hour: '17:20',
-    },
-    {
-      name: 'Consulta médico',
-      hour: '13:10',
-    },
-    // {
-    //   name: 'Lavar carro',
-    //   hour: '17:00',
-    // },
-    // {
-    //   name: 'Cachorro Petshop',
-    //   hour: '12:00',
-    // },
-    // {
-    //   name: 'Entregar Trabalho',
-    //   hour: '17:00',
-    // }
-  ];
-
-  const RenderEvents = () => {
+  const RenderEvents = (props) => {
+    const currentDate = props.date.format('DD/MM/YYYY');
+    console.log(currentDate)
     return (
       <div className="calendar-event-wrapper">
+        {console.log(events)}
         {
-          events.map((event) => {
+          
+          events[currentDate] && events[currentDate].map((event) => {
             return (
               <div key={event.hour} className="calendar-event-item">
                 <span className="event-circle"></span>
                 <span className="event-title">
                   {event.name && event.name}
+                  {/* Nome do evento */}
                 </span>
+                {/* <span className="event-hour">{event.hour && event.hour}</span> */}
                 <span className="event-hour">{event.hour && event.hour}</span>
               </div>
             );
@@ -151,7 +125,7 @@ function Calendar() {
       <Modal
         setAddNewEventVisible={setAddNewEventVisible}
         addNewEventVisible={addNewEventVisible}
-        selectedElement={events[selectedIndex]}
+        selectedElement={events[setSelectedIndex] && events[setSelectedIndex]}
       />
       <div className="calendar-wrapper">
         {
@@ -159,12 +133,12 @@ function Calendar() {
             // console.log(date)
             // console.log(date.format('L'))
             return (
-              <div onClick={() => handleDateClick(index)} className="calendar-item-wrapper" key={date.format('L')}>
+              <div onClick={() => handleDateClick(date.format('DD/MM/YYYY'))} className="calendar-item-wrapper" key={date.format('L')}>
                 <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
                   <div className="event-date-number">
                     {date.date()}
                   </div>
-                  <RenderEvents />
+                  <RenderEvents date={date}/>
                 </div>
                 
                 {/* <>

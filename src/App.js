@@ -1,12 +1,16 @@
 import logo from './logo.svg';
 import Calendar from './Calendar';
+import { Provider } from 'react-redux'
+import store from './store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Calendar />
+      <Provider store={store}>
+        <Calendar />
+      </Provider>
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
