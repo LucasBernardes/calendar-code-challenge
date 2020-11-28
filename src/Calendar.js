@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import Modal from './Modal';
 import './styles.css';
-import { fireEvent } from '@testing-library/react';
 
 function Calendar() {
+  const [addNewEventVisible, setAddNewEventVisible] = useState(false)
   const [monthOffset, setMonthOffset] = useState(0)
   const [currentMonth, setCurrentMonth] = useState(moment().add(0, 'months'))
+  const [selectedIndex, setSelectedIndex] = useState(null);
   // const [lastMonth, setLastMonth] = useState(Array.from({length: moment().add(monthOffset - 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset - 1,'months').startOf('month').add(i, 'days')))
   const [nextMonth, setNextMonth] = useState(Array.from({length: moment().add(monthOffset + 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset + 1,'months').startOf('month').add(i, 'days')))
   const [currentMonthDates, setCurrentMonthDates] = useState(Array.from({length: moment().add(monthOffset,'months').daysInMonth()}, (x, i) => moment().add(monthOffset,'months').startOf('month').add(i, 'days')))
@@ -138,17 +140,26 @@ function Calendar() {
     );
   }
   // console.log(currentMonthDates)
+  const handleDateClick = (index) => {
+    setSelectedIndex(index)
+    setAddNewEventVisible(true)
+  }
   return (
     <>
       <MonthChooserHeader />
       <HeaderCalendar />
+      <Modal
+        setAddNewEventVisible={setAddNewEventVisible}
+        addNewEventVisible={addNewEventVisible}
+        selectedElement={events[selectedIndex]}
+      />
       <div className="calendar-wrapper">
         {
-          currentMonthDates.map((date) => {
+          currentMonthDates.map((date, index) => {
             // console.log(date)
             // console.log(date.format('L'))
             return (
-              <div className="calendar-item-wrapper" key={date.format('L')}>
+              <div onClick={() => handleDateClick(index)} className="calendar-item-wrapper" key={date.format('L')}>
                 <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
                   <div className="event-date-number">
                     {date.date()}

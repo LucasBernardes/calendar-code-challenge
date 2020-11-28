@@ -106,3 +106,13 @@
     width: 50px;
     height: 20px;
 }
+
+.modal-wrapper {
+    left: 50%;
+    top: 50%;
+    width: 50%;
+    height: 60%;
+    background-color: white;
+    border-radius: 10px;
+    border-width: 0px;
+}
