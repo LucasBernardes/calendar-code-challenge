@@ -5,16 +5,26 @@ const INITIAL_STATE = {
     '11/11/2020': [{
       title: 'Consulta médico',
       hour: '13:00',
+      city: 'Sidney',
+      color: '#007bff',
     }],
     '12/11/2020': [{
       title: 'Lavar carro',
       hour: '18:00',
+      city: 'London',
+      color: '#dc3545',
     }],
   },
 }
 
 function events(state =  INITIAL_STATE, action) {
     switch(action.type) {
+      case 'SELECTED_EVENT':
+        return {
+          ...state,
+          selectedDate: null,
+          selectedEvent: action.data,
+        }
       case 'SELECTED_DATE':
         return {...state, selectedDate: action.data}
       case 'REMOVE_EVENT':
@@ -23,6 +33,12 @@ function events(state =  INITIAL_STATE, action) {
         const index = action.data.index;
         state.data[dateString].splice(index, 1);
         return state
+      // case 'REMOVE_ALL_EVENTS_FROM_DAY':
+      //   console.log(action.data)
+      //   const dateString = action.data.date;
+      //   const index = action.data.index;
+      //   state.data[dateString].splice(index, 1);
+      //   return state
       case 'ADD_NEW_EVENT':
         const date = Object.keys(action.data)[0];
         const event = action.data[date];

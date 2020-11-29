@@ -1,19 +1,54 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { radios } from './static';
+import './styles.css';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { Col, Row, Form, ButtonGroup } from "react-bootstrap";
+import axios from "axios";
+import { Col, Row, Form, ButtonGroup, ToggleButton, Container } from "react-bootstrap";
 
 function AddEventModal(props) {
+  const selectedDate = useSelector(state => state.selectedDate);
+  console.log('data no modal', selectedDate)
   const [validated, setValidated] = useState(false);
   const [title, setTitle] = useState('');
   const [city, setCity] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(selectedDate && selectedDate.date ? selectedDate.date : '');
   const [hour, setHour] = useState('');
+  
 
-  const selectedDate = useSelector(state => state.selectedDate);
+  const [radioValue, setRadioValue] = useState('1');
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (props.addNewEventVisible) {
+      console.log(selectedDate.date)
+      setDate(selectedDate.date)
+      if (true) {
+        // const options = {
+        //   method: 'GET',
+        //   url: 'https://community-open-weather-map.p.rapidapi.com/forecast/daily',
+        //   params: {
+        //     q: 'maringa,brazil',
+        //     cnt: '16',
+        //     units: 'metric'
+        //   },
+        //   headers: {
+        //     'x-rapidapi-key': '99911a1476msh22ab3d3cde144f0p107d38jsna51a006db844',
+        //     'x-rapidapi-host': 'community-open-weather-map.p.rapidapi.com'
+        //   }
+        // };
+        
+        // axios.request(options).then(function (response) {
+        //   console.log(response.data);
+        // }).catch(function (error) {
+        //   console.error(error);
+        // });
+      }
+    }
+    
+  },[props.addNewEventVisible])
   
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -23,27 +58,32 @@ function AddEventModal(props) {
       event.stopPropagation();
     } 
 
-    setValidated(true);
-    event.preventDefault();
-    event.stopPropagation();
-    console.log(event)
-    console.log({
-      title,
-      city,
-      date,
-      hour,
-    })
-    dispatch({
-      type: 'ADD_NEW_EVENT',
-      data: {
-        [date]: [{
-          title,
-          city,
-          date,
-          hour,
-        }],
-      },
-    })
+    else {
+      setValidated(true);
+      event.preventDefault();
+      event.stopPropagation();
+      console.log(event)
+      console.log({
+        title,
+        city,
+        date,
+        hour,
+      })
+      dispatch({
+        type: 'ADD_NEW_EVENT',
+        data: {
+          [date]: [{
+            title,
+            city,
+            date,
+            hour,
+            color: radios[radioValue].color
+          }],
+        },
+      })
+      props.setAddNewEventVisible(false)
+    }
+    
   };
 
   // const handleRemove = (data) => {
@@ -55,8 +95,10 @@ function AddEventModal(props) {
   
   return (
     <Modal show={props.addNewEventVisible} onHide={() => props.setAddNewEventVisible(false)} centered>
-      <Modal.Header closeButton/>
-      <Form noValidate validated={validated} onSubmit={handleSubmit} style={{ margin: 20 }}>
+      <Modal.Header className="header-color" closeButton>
+        <Modal.Title>Create Event</Modal.Title>
+      </Modal.Header>
+      <Form noValidate validated={validated} onSubmit={handleSubmit} style={{ margin: 40 }}>
         
         <Form.Label>Title</Form.Label>
           <Form.Control
@@ -79,7 +121,7 @@ function AddEventModal(props) {
         </Form.Group>
         <Form.Group as={Col} md="3" controlId="validationCustom04">
           <Form.Label>Date</Form.Label>
-          <Form.Control type="text" placeholder="State" onChange={e => setDate(e.target.value)} required />
+          <Form.Control type="text" placeholder="State" value={date} onChange={e => setDate(e.target.value)} required />
           <Form.Control.Feedback type="invalid">
             Please provide a valid Date.
           </Form.Control.Feedback>
@@ -95,16 +137,32 @@ function AddEventModal(props) {
           </Form.Control.Feedback>
         </Form.Group>
       </Form.Row>
-      <Form.Group as={Col} md="3" controlId="validationCustom06">
-        <Form.Label>Color</Form.Label>
-        <ButtonGroup aria-label="Color">
-          <Button style={{ backgroundColor: 'red' }} variant="secondary">Red</Button>
-          <Button variant="primary">Blue</Button>
-          <Button style={{ backgroundColor: 'green' }}variant="secondary">Green</Button>
-        </ButtonGroup>
-      </Form.Group>
-      <Button type="submit">Submit form</Button>
-    </Form>
+      <Row>
+        
+        <Container>
+        <Form.Label>Color code</Form.Label>
+          <ButtonGroup toggle>
+            {radios.map((radio, idx) => (
+              <ToggleButton
+                key={idx}
+                style={{ backgroundColor: radio.value === radioValue ? radio.color : 'lightGray' }}
+                type="radio"
+                variant="secondary"
+                name="radio"
+                value={radio.value}
+                checked={radioValue === radio.value}
+                onChange={(e) => setRadioValue(e.currentTarget.value)}
+              >
+                {radio.name}
+              </ToggleButton>
+            ))}
+          </ButtonGroup>
+        </Container>
+      </Row>
+        <div className="submit-form-button">
+          <Button size="lg" block type="submit">Create</Button>
+        </div>
+      </Form>
     </Modal>
   );
 }

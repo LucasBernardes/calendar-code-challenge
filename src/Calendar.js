@@ -29,6 +29,7 @@ function Calendar() {
         type: 'SELECTED_DATE',
         data: '',
       })
+      console.log('removi')
     }
   },[addNewEventVisible])
 
@@ -83,7 +84,7 @@ function Calendar() {
           events && events[currentDate] && events[currentDate].map((event, index) => {
             return (
               <div key={event.hour} className="calendar-event-item" onClick={() => handleEventClick(props.date.format('DD/MM/YYYY'), index)}>
-                <span className="event-circle"></span>
+                <span className="event-circle" style={{ backgroundColor: event.color }}></span>
                 <span className="event-title">
                   {event.title && event.title}
                   {/* Nome do evento */}
@@ -129,22 +130,30 @@ function Calendar() {
   }
   // console.log(currentMonthDates)
   const handleDateClick = (date) => {
-    dispatch({
-      type: 'SELECTED_DATE',
-      data: { date },
-    })
-    setSelectedIndex(date)
-    setAddNewEventVisible(true)
+    console.log('chamei')
+    // dispatch({
+    //   type: 'SELECTED_DATE',
+    //   data: { date },
+    // })
+    // setSelectedIndex(date)
+    // setAddNewEventVisible(true)
   }
 
-  const handleEventClick = (date, index) => {
-    dispatch({
-      type: 'REMOVE_EVENT',
-      data: {
-        date,
-        index,
-      }
-    })
+  const handleEventClick = (e, date, index) => {
+    e.stopPropagation();
+    console.log('chamei evento')
+    // dispatch({
+    //     type: 'SELECTED_EVENT',
+    //     data: events.date[index],
+    //   })
+
+    // dispatch({
+    //   type: 'REMOVE_EVENT',
+    //   data: {
+    //     date,
+    //     index,
+    //   }
+    // })
   }
 
   return (
@@ -154,7 +163,6 @@ function Calendar() {
       <Modal
         setAddNewEventVisible={setAddNewEventVisible}
         addNewEventVisible={addNewEventVisible}
-        // selectedElement={events[setSelectedIndex] && events[setSelectedIndex]}
       />
       <div className="calendar-wrapper">
         {
@@ -162,7 +170,7 @@ function Calendar() {
             // console.log(date)
             // console.log(date.format('L'))
             return (
-              <div onClick={() => handleDateClick(date.format('DD/MM/YYYY'))} className="calendar-item-wrapper" key={date.format('L')}>
+              <div onClick={(e) => handleDateClick(e, date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
                 <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
                   <div className="event-date-number">
                     {date.date()}
