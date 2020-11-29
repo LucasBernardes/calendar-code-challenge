@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
+import Alert from './Alert';
 import moment from 'moment';
 import Modal from './Modal';
 import './styles.css';
@@ -14,6 +14,7 @@ function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(moment().add(0, 'months'))
   const [selectedIndex, setSelectedIndex] = useState(null);
   const dispatch = useDispatch();
+  
   // const [lastMonth, setLastMonth] = useState(Array.from({length: moment().add(monthOffset - 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset - 1,'months').startOf('month').add(i, 'days')))
   const [nextMonth, setNextMonth] = useState(Array.from({length: moment().add(monthOffset + 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset + 1,'months').startOf('month').add(i, 'days')))
   const [currentMonthDates, setCurrentMonthDates] = useState(Array.from({length: moment().add(monthOffset,'months').daysInMonth()}, (x, i) => moment().add(monthOffset,'months').startOf('month').add(i, 'days')))
@@ -130,36 +131,37 @@ function Calendar() {
   }
   // console.log(currentMonthDates)
   const handleDateClick = (date) => {
-    console.log('chamei')
-    // dispatch({
-    //   type: 'SELECTED_DATE',
-    //   data: { date },
-    // })
-    // setSelectedIndex(date)
-    // setAddNewEventVisible(true)
+    console.log('chamei', date)
+    dispatch({
+      type: 'SELECTED_DATE',
+      data: { date },
+    })
+    setSelectedIndex(date)
+    setAddNewEventVisible(true)
   }
 
   const handleEventClick = (e, date, index) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     console.log('chamei evento')
-    // dispatch({
-    //     type: 'SELECTED_EVENT',
-    //     data: events.date[index],
-    //   })
+    dispatch({
+        type: 'SELECTED_EVENT',
+        data: events.date[index],
+      })
 
-    // dispatch({
-    //   type: 'REMOVE_EVENT',
-    //   data: {
-    //     date,
-    //     index,
-    //   }
-    // })
+    dispatch({
+      type: 'REMOVE_EVENT',
+      data: {
+        date,
+        index,
+      }
+    })
   }
 
   return (
     <>
       <MonthChooserHeader />
       <HeaderCalendar />
+      {/* <Alert /> */}
       <Modal
         setAddNewEventVisible={setAddNewEventVisible}
         addNewEventVisible={addNewEventVisible}
@@ -170,7 +172,7 @@ function Calendar() {
             // console.log(date)
             // console.log(date.format('L'))
             return (
-              <div onClick={(e) => handleDateClick(e, date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
+              <div onClick={(e) => handleDateClick(date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
                 <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
                   <div className="event-date-number">
                     {date.date()}
