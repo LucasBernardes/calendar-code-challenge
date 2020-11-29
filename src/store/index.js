@@ -15,24 +15,33 @@ const INITIAL_STATE = {
       color: '#dc3545',
     }],
   },
+  modalMode: '',
 }
 
 function events(state =  INITIAL_STATE, action) {
     switch(action.type) {
+      case 'EDIT_EVENT':
+        return {
+          ...state,
+          selectedDate: null,
+          selectedEvent: action.data,
+          modalMode: 'CREATE_EDIT_MODAL_STYLE',
+        }
       case 'SELECTED_EVENT':
         return {
           ...state,
           selectedDate: null,
           selectedEvent: action.data,
+          modalMode: 'VIEW_EVENT_MODAL_STYLE',
         }
       case 'SELECTED_DATE':
-        return {...state, selectedDate: action.data}
+        return {
+          ...state, 
+          selectedDate: action.data,
+          modalMode: 'CREATE_EDIT_MODAL_STYLE',
+        }
       case 'REMOVE_EVENT':
-        console.log(action.data)
-        const dateString = action.data.date;
-        const index = action.data.index;
-        state.data[dateString].splice(index, 1);
-        return state
+        return {...state, data: action.data}
       // case 'REMOVE_ALL_EVENTS_FROM_DAY':
       //   console.log(action.data)
       //   const dateString = action.data.date;

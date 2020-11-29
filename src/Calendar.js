@@ -78,13 +78,14 @@ function Calendar() {
   },[])
 
   const RenderEvents = (props) => {
-    const currentDate = props.date.format('DD/MM/YYYY');
+    const { date } = props;
+    const currentDate = date.format('DD/MM/YYYY');
     return (
       <div className="calendar-event-wrapper">
         {
           events && events[currentDate] && events[currentDate].map((event, index) => {
             return (
-              <div key={event.hour} className="calendar-event-item" onClick={() => handleEventClick(props.date.format('DD/MM/YYYY'), index)}>
+              <div key={event.hour} className="calendar-event-item" onClick={(e) => handleEventClick(e, props.date.format('DD/MM/YYYY'), index)}>
                 <span className="event-circle" style={{ backgroundColor: event.color }}></span>
                 <span className="event-title">
                   {event.title && event.title}
@@ -129,9 +130,9 @@ function Calendar() {
       </div>
     );
   }
-  // console.log(currentMonthDates)
+
   const handleDateClick = (date) => {
-    console.log('chamei', date)
+    console.log('chamei date')
     dispatch({
       type: 'SELECTED_DATE',
       data: { date },
@@ -141,20 +142,14 @@ function Calendar() {
   }
 
   const handleEventClick = (e, date, index) => {
-    // e.stopPropagation();
-    console.log('chamei evento')
+    console.log('chamei event')
+    e.stopPropagation();
     dispatch({
-        type: 'SELECTED_EVENT',
-        data: events.date[index],
-      })
-
-    dispatch({
-      type: 'REMOVE_EVENT',
-      data: {
-        date,
-        index,
-      }
+      type: 'SELECTED_EVENT',
+      data: {...events[date][index], index, date},
     })
+
+    setAddNewEventVisible(true) 
   }
 
   return (
@@ -172,7 +167,8 @@ function Calendar() {
             // console.log(date)
             // console.log(date.format('L'))
             return (
-              <div onClick={(e) => handleDateClick(date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
+              <div onClick={() => handleDateClick(date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
+              {/* <div className="calendar-item-wrapper" key={date.format('L')}> */}
                 <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
                   <div className="event-date-number">
                     {date.date()}
