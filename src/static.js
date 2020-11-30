@@ -1,4 +1,4 @@
-export const radios = [
+export const colors = [
     { name: ' Blue ', value: '0', color: '#007bff' },
     { name: ' Gray ', value: '1', color: '#6c757d'},
     { name: 'Green', value: '2', color: '#28a745' },

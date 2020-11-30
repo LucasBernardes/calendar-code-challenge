@@ -6,13 +6,13 @@ const INITIAL_STATE = {
       title: 'Consulta médico',
       hour: '13:00',
       city: 'Sidney',
-      color: '#007bff',
+      radioValue: '1'
     }],
     '12/11/2020': [{
       title: 'Lavar carro',
       hour: '18:00',
       city: 'London',
-      color: '#dc3545',
+      radioValue: '0'
     }],
   },
   modalMode: '',
@@ -25,7 +25,7 @@ function events(state =  INITIAL_STATE, action) {
           ...state,
           selectedDate: null,
           selectedEvent: action.data,
-          modalMode: 'CREATE_EDIT_MODAL_STYLE',
+          modalMode: 'EDIT_MODAL_STYLE',
         }
       case 'SELECTED_EVENT':
         return {
@@ -38,7 +38,7 @@ function events(state =  INITIAL_STATE, action) {
         return {
           ...state, 
           selectedDate: action.data,
-          modalMode: 'CREATE_EDIT_MODAL_STYLE',
+          modalMode: 'CREATE_MODAL_STYLE',
         }
       case 'REMOVE_EVENT':
         return {...state, data: action.data}

@@ -4,7 +4,7 @@ import Alert from './Alert';
 import moment from 'moment';
 import Modal from './Modal';
 import './styles.css';
-
+import { colors } from './static';
 
 function Calendar() {
   const events = useSelector(state => state.data);
@@ -30,7 +30,6 @@ function Calendar() {
         type: 'SELECTED_DATE',
         data: '',
       })
-      console.log('removi')
     }
   },[addNewEventVisible])
 
@@ -84,9 +83,10 @@ function Calendar() {
       <div className="calendar-event-wrapper">
         {
           events && events[currentDate] && events[currentDate].map((event, index) => {
+            console.log(event)
             return (
               <div key={event.hour} className="calendar-event-item" onClick={(e) => handleEventClick(e, props.date.format('DD/MM/YYYY'), index)}>
-                <span className="event-circle" style={{ backgroundColor: event.color }}></span>
+                <span className="event-circle" style={{ backgroundColor: colors[event.radioValue].color }}></span>
                 <span className="event-title">
                   {event.title && event.title}
                   {/* Nome do evento */}
@@ -137,6 +137,7 @@ function Calendar() {
       type: 'SELECTED_DATE',
       data: { date },
     })
+    console.log(date)
     setSelectedIndex(date)
     setAddNewEventVisible(true)
   }
@@ -161,11 +162,10 @@ function Calendar() {
         setAddNewEventVisible={setAddNewEventVisible}
         addNewEventVisible={addNewEventVisible}
       />
+      
       <div className="calendar-wrapper">
         {
           currentMonthDates.map((date, index) => {
-            // console.log(date)
-            // console.log(date.format('L'))
             return (
               <div onClick={() => handleDateClick(date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
               {/* <div className="calendar-item-wrapper" key={date.format('L')}> */}
@@ -175,9 +175,6 @@ function Calendar() {
                   </div>
                   <RenderEvents date={date}/>
                 </div>
-                
-                {/* <>
-                </> */}
               </div>
             );
           })

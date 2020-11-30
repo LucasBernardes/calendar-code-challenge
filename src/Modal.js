@@ -1,13 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
+import { useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import { radios } from './static';
 import EventDisplayer from './EventDisplayer';
 import './styles.css';
-import InputGroup from 'react-bootstrap/InputGroup';
-
 import CreateEvent from './CreatEvent';
 
 
@@ -27,7 +21,9 @@ function AddEventModal(props) {
     switch(modalMode) {
       case('VIEW_EVENT_MODAL_STYLE'):
         return(<EventDisplayer selectedEvent={selectedEvent} hideModalEvent={hideModalEvent}/>);
-      case('CREATE_EDIT_MODAL_STYLE'):
+      case('CREATE_MODAL_STYLE'):
+      case('EDIT_MODAL_STYLE'):
+        console.log('ta esse')
         return(<CreateEvent selectedDate={selectedDate} addNewEventVisible={addNewEventVisible} setAddNewEventVisible={setAddNewEventVisible}/>);
       default:
         return null;

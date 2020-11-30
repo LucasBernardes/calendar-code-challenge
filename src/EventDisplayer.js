@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Modal, Button, ListGroup, Accordion } from 'react-bootstrap';
+import { Card, Modal, Button, ListGroup, Accordion, Alert, Badge } from 'react-bootstrap';
 import moment from 'moment';
 import axios from "axios";
 
@@ -58,8 +58,9 @@ function EventDisplayer(props) {
   }
 
   const handleEditEvent = () => {
+    console.log(selectedEvent)
     dispatch({
-      type: 'SELECTED_EVENT',
+      type: 'EDIT_EVENT',
       data: selectedEvent,
     })
   }
@@ -72,6 +73,13 @@ function EventDisplayer(props) {
     //     <>
     //   )
     // }
+    if (isLoadingWeaher) {
+      return (
+        <Alert variant="primary">
+          Loading weather from server
+        </Alert>
+      );
+    }
     if (weather && weather.constructor === Array) {
       const listWeather = weather.map((day) => {
         if (day.weather) {
@@ -84,21 +92,31 @@ function EventDisplayer(props) {
       })
 
       return(
-        <Card.Text>
-           {/* {`Weather on ${weather.}for Next 16 Days:`} */}
-           <Accordion>
+        // <Card.Text>
+           
+          <Accordion>
            <Card>
             <Card.Header>
            <Accordion.Toggle as={Button} variant="link" eventKey="0">
-              {`Weather for Next 16 Days:`}
+              {`Weather for Next 16 Days`}
             </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
               <ListGroup>
               {
                 listWeather.map((weatherList, index) => {
+                  const day = moment().add(index, 'days').format('DD/MM/YYYY');
                   return (
-                    <ListGroup.Item>{`${moment().add(index, 'days').format('DD/MM')} - ${weatherList.join(', ')}`}</ListGroup.Item>
+                    <div key={index}>
+                      <ListGroup.Item >
+                        {`${day} - ${weatherList.join(', ')}`}
+                        {selectedEvent.date ===  day ? (
+                          <>
+                            {' '}<Badge variant="primary">Your event day!</Badge>
+                          </>
+                        ) : null }
+                      </ListGroup.Item>
+                    </div>
                   );
                 })
               }
@@ -106,11 +124,15 @@ function EventDisplayer(props) {
             </Accordion.Collapse>
             </Card>
           </Accordion>
-        </Card.Text>
+        // </Card.Text>
       )
       // console.log(listWeather)
     }
-    return null
+    return (
+      <Alert variant="warning">
+        No weather found for this location
+      </Alert>
+    );
     
 
 
@@ -121,15 +143,15 @@ function EventDisplayer(props) {
     <>
       {console.log(selectedEvent)}
       <Modal.Header className="header-color" closeButton>
-      <Modal.Title>{selectedEvent.hour && selectedEvent.date ? moment(`${selectedEvent.date} ${selectedEvent.hour}`).format('DD/MM/YYYY HH:mm').toString() : ''}</Modal.Title>
+      <Modal.Title>{selectedEvent.hour && selectedEvent.date ? moment(`${selectedEvent.date} ${selectedEvent.hour}`,'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm').toString() : ''}</Modal.Title>
       </Modal.Header>
       <Card>
         <Card.Body>
           <Card.Title>{selectedEvent.title && selectedEvent.title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{selectedEvent.city && selectedEvent.city}</Card.Subtitle>
           <HandleWeather />
-          <Button onClick={handleEditEvent} variant="primary">Edit</Button>{' '}
-          <Button onClick={handleDeleteEvent}  variant="danger">Delete</Button>
+          <Button onClick={handleEditEvent} variant="primary mt-4">Edit</Button>{' '}
+          <Button onClick={handleDeleteEvent}  variant="danger mt-4">Delete</Button>
         </Card.Body>
       </Card>
     </>

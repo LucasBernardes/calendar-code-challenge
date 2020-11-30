@@ -95,7 +95,7 @@
     margin-left: 2px;
     height: 6px;
     width: 6px;
-    background-color: red;
+    /* background-color: red; */
     border-radius: 50%;
     display: inline-block;
 }
