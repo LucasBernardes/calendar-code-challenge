@@ -29,18 +29,14 @@ function AddEventModal(props) {
         return null;
     }
   }
-
-  
-
-  // const handleRemove = (data) => {
-  //   dispatch({
-  //     type: 'REMOVE_EVENT',
-  //     data
-  //   })
-  // }
   
   return (
-    <Modal show={addNewEventVisible} onHide={hideModalEvent} centered>
+    <Modal
+      show={addNewEventVisible}
+      onHide={hideModalEvent}
+      style={{ minWidth: 470 }}
+      centered
+    >
       <ModalContentSelector />   
     </Modal>
   );

@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     width: 100%;
     height: calc(100vh - 63px);
+    min-width:600px;
     /* background-color: blue; */
 }
 

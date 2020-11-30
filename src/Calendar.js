@@ -76,8 +76,7 @@ function Calendar() {
     //console.log(auxArray)
   },[])
 
-  const RenderEvents = (props) => {
-    const { date } = props;
+  const RenderEvents = (date) => {
     const currentDate = date.format('DD/MM/YYYY');
     return (
       <div className="calendar-event-wrapper">
@@ -85,7 +84,7 @@ function Calendar() {
           events && events[currentDate] && events[currentDate].map((event, index) => {
             console.log(event)
             return (
-              <div key={event.hour} className="calendar-event-item" onClick={(e) => handleEventClick(e, props.date.format('DD/MM/YYYY'), index)}>
+              <div key={event.hour} className="calendar-event-item" onClick={(e) => handleEventClick(e, date.format('DD/MM/YYYY'), index)}>
                 <span className="event-circle" style={{ backgroundColor: colors[event.radioValue].color }}></span>
                 <span className="event-title">
                   {event.title && event.title}
@@ -173,7 +172,7 @@ function Calendar() {
                   <div className="event-date-number">
                     {date.date()}
                   </div>
-                  <RenderEvents date={date}/>
+                  {RenderEvents(date)}
                 </div>
               </div>
             );

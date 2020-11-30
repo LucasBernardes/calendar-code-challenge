@@ -60,7 +60,7 @@ function EventDisplayer(props) {
   const handleEditEvent = () => {
     console.log(selectedEvent)
     dispatch({
-      type: 'EDIT_EVENT',
+      type: 'EDIT_EVENT_MODE',
       data: selectedEvent,
     })
   }

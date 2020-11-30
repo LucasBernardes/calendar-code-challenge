@@ -3,40 +3,82 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { colors } from './static';
+const emptyNewEvent = {
+  title: '',
+  city: '',
+  date: '',
+  hour: '',
+  radioValue: '0',
+}
 
 function CreateEvent(props) {
-  const { selectedDate, addNewEventVisible } = props;
+  // const { addNewEventVisible } = props;
   const dispatch = useDispatch();
+  const selectedDate = useSelector(state => state.selectedDate);
   const selectedEvent = useSelector(state => state.selectedEvent); 
-  const modalMode = useSelector(state => state.modalMode); 
+  const modalMode = useSelector(state => state.modalMode);
+  const events = useSelector(state => state.data); 
   const [validated, setValidated] = useState(false);
-  const emptyNewEvent = {
-    title: '',
-    city: '',
-    date: (selectedDate && selectedDate.date ? selectedDate.date : ''),
-    hour: '',
-    radioValue: '0',
-  }
-  const [newEventData, setNewEventData] = useState(emptyNewEvent)
+  console.log(selectedEvent)
+  const [newEventData, setNewEventData] = useState(modalMode === 'EDIT_MODAL_STYLE' ? (
+    selectedEvent
+  ) : (
+    {...emptyNewEvent, date: selectedDate.date ? selectedDate.date : ''}
+  ))
   
-  useEffect(() => {
-    console.log('selectedEvent', selectedEvent)
-  },[selectedEvent])
 
-  useEffect(() => {
-    if (props.addNewEventVisible) {
-      if (selectedDate && selectedDate.date) {
-        setNewEventData({...newEventData, date: selectedDate.date})
-      }
-    }
-  },[addNewEventVisible])
+  // useEffect(() => {
+  //   console.log('MONTEI')
+  //   // setNewEventData((selectedDate && selectedDate.date ? {...newEventData, date: selectedDate.date} : newEventData))
+  //   if (modalMode === 'EDIT_MODAL_STYLE' && selectedEvent) {
+  //     setNewEventData(selectedEvent)
+  //     console.log(newEventData)
+  //   } else {
+  //     setNewEventData()
+  //     console.log(newEventData)
+  //   }
+    
+  // },[])
 
-  useEffect(() => {
-    if (modalMode === 'EDIT_MODAL_STYLE') {
-      console.log(selectedEvent)
-      setNewEventData(selectedEvent)
-    }
-  },[modalMode])
+  // useEffect(() => {
+  //   setNewEventData(selectedEvent)
+  // },[selectedEvent])
+
+  // useEffect(() => {
+  //   if (props.addNewEventVisible) {
+  //     if (selectedDate && selectedDate.date) {
+  //       setNewEventData({...newEventData, date: selectedDate.date})
+  //     }
+  //   }
+  // },[addNewEventVisible])
+
+  // useEffect(() => {
+  //   if (modalMode === 'EDIT_MODAL_STYLE') {
+  //     setNewEventData(selectedEvent)
+  //   }
+  // },[modalMode])
+const update = () => {
+  // const newDate = {...events};
+  // newDate[selectedEvent.date].splice(selectedEvent.index, 1)
+  return dispatch => {
+    // dispatch({
+    //   type: 'REMOVE_EVENT',
+    //   data: newDate,
+    // })
+    dispatch({
+      type: 'ADD_NEW_EVENT',
+      data: {
+        [newEventData.date]: [{
+          title: newEventData.title,
+          city: newEventData.city,
+          date: newEventData.date,
+          hour: newEventData.hour,
+          radioValue: newEventData.radioValue
+        }],
+      },
+    })
+  }
+}
 
 const handleSubmit = (event) => {
   const form = event.currentTarget;
@@ -49,20 +91,43 @@ const handleSubmit = (event) => {
     setValidated(true);
   } 
   else {
-    dispatch({
-      type: 'ADD_NEW_EVENT',
-      data: {
-        [newEventData.date]: [{
-          title: newEventData.title,
-          city: newEventData.city,
-          date: newEventData.date,
-          hour: newEventData.hour,
-          color: colors[newEventData.radioValue].color
-        }],
-      },
-    })
+    if (modalMode === 'EDIT_MODAL_STYLE') {
+      const newDate = {...events};
+      newDate[selectedEvent.date].splice(selectedEvent.index, 1)
+      dispatch({
+        type: 'REMOVE_EVENT',
+        data: newDate,
+      })
+      dispatch({
+        type: 'ADD_NEW_EVENT',
+        data: {
+          [newEventData.date]: [{
+            title: newEventData.title,
+            city: newEventData.city,
+            date: newEventData.date,
+            hour: newEventData.hour,
+            radioValue: newEventData.radioValue
+          }],
+        },
+      })
+    } else {
+      dispatch({
+        type: 'ADD_NEW_EVENT',
+        data: {
+          [newEventData.date]: [{
+            title: newEventData.title,
+            city: newEventData.city,
+            date: newEventData.date,
+            hour: newEventData.hour,
+            radioValue: newEventData.radioValue
+          }],
+        },
+      })
+    }
+    
     setValidated(false);
     props.setAddNewEventVisible(false)
+    setNewEventData(emptyNewEvent)
     cleanField()
     // cleanField()
   }
@@ -80,8 +145,8 @@ const cleanField = () => {
     <Modal.Header className="header-color" closeButton>
       <Modal.Title>{modalMode === 'EDIT_MODAL_STYLE' ? 'Editing Event' : 'Creating Event'}</Modal.Title>
     </Modal.Header>
-    <Container>
-      <Row className="justify-content-md-center mt-1">
+    <Container fluid>
+      <Row className="justify-content-md-center mt-1" style={{ justifyContent: 'center' }}>
         {console.log(newEventData)}
         <h1>
           <Badge variant="secondary" style={{ backgroundColor: colors[newEventData.radioValue].color }}>
@@ -97,6 +162,7 @@ const cleanField = () => {
           required
           type="text"
           placeholder="Name for the event"
+          value={newEventData.title}
           onChange={e => setNewEventData({...newEventData, title: e.target.value})}
           isInvalid={newEventData.title.length >= 30}
           isValid={newEventData.title && newEventData.title.length < 30}
@@ -112,6 +178,7 @@ const cleanField = () => {
           placeholder="(Ex: Tampa)"
           required
           onChange={e => setNewEventData({...newEventData, city: e.target.value})}
+          value={newEventData.city}
           // isInvalid={city.length >= 30}
           isValid={newEventData.city}/>
         <Form.Control.Feedback type="invalid">
@@ -137,9 +204,9 @@ const cleanField = () => {
         <Form.Label>Hour</Form.Label>
         {console.log(moment(newEventData.hour, 'HH:mm', true))}
         <Form.Control
+          value={newEventData.hour}
           isInvalid={newEventData.hour && !moment(newEventData.hour, 'HH:mm', true).isValid()}
           isValid={moment(newEventData.hour, 'HH:mm', true).isValid()}
-          // isInvalid={hour.match("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$") === null}
           type="text" placeholder="(Ex 10:00)" required onChange={e => setNewEventData({...newEventData, hour: e.target.value})}/>
         <Form.Control.Feedback type="invalid">
           Please provide a valid Hour (Ex: 13:00).
@@ -168,7 +235,7 @@ const cleanField = () => {
         </Container>
       </Row>
         <div className="submit-form-button">
-          <Button size="lg" block type="submit">Create</Button>
+            <Button size="lg" block type="submit">{modalMode === 'EDIT_MODAL_STYLE' ? 'Update' : 'Create'}</Button>
         </div>
       </Form>
     </>
