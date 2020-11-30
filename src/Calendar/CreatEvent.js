@@ -11,6 +11,16 @@ const emptyNewEvent = {
   radioValue: '0',
 }
 
+const validateNewEvent = (newEventData) => {
+  return (
+    newEventData.title
+    && newEventData.title.length < 30
+    && newEventData.city
+    && moment(newEventData.date, 'DD/MM/YYYY', true).isValid()
+    && moment(newEventData.hour, 'HH:mm', true).isValid()
+  )
+}
+
 function CreateEvent(props) {
   // const { addNewEventVisible } = props;
   const dispatch = useDispatch();
@@ -35,13 +45,7 @@ function CreateEvent(props) {
       setValidated(true);
     }
     else {
-      if (
-        newEventData.title
-        && newEventData.title.length < 30
-        && newEventData.city
-        && moment(newEventData.date, 'DD/MM/YYYY', true).isValid()
-        && moment(newEventData.hour, 'HH:mm', true).isValid()
-      ) {
+      if (validateNewEvent(newEventData)) {
         if (modalMode === 'EDIT_MODAL_STYLE') {
           const newDate = { ...events };
           newDate[selectedEvent.date].splice(selectedEvent.index, 1)
@@ -220,4 +224,4 @@ function CreateEvent(props) {
   );
 }
 
-export default CreateEvent;
+export { CreateEvent, validateNewEvent };
