@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, Modal, Button, ListGroup, Accordion, Alert, Badge } from 'react-bootstrap';
+import { Card, Modal, Button, ListGroup, Accordion, Alert, Badge, Spinner } from 'react-bootstrap';
 import moment from 'moment';
 import axios from "axios";
 
@@ -29,7 +29,6 @@ function EventDisplayer(props) {
       }
     };
     axios.request(options).then(function (response) {
-      console.log(response.data)
       if (response.data && response.data.list) {
         setWeather(response.data.list)
       }
@@ -52,7 +51,6 @@ function EventDisplayer(props) {
   }
 
   const handleEditEvent = () => {
-    console.log(selectedEvent)
     dispatch({
       type: 'EDIT_EVENT_MODE',
       data: selectedEvent,
@@ -63,7 +61,7 @@ function EventDisplayer(props) {
     if (isLoadingWeaher) {
       return (
         <Alert variant="primary">
-          Loading weather from server
+          <Spinner animation="border" variant="primary" /> Loading weather from server
         </Alert>
       );
     }
@@ -124,7 +122,6 @@ function EventDisplayer(props) {
 
   return (
     <>
-      {console.log(selectedEvent)}
       <Modal.Header className="header-color" closeButton>
         <Modal.Title>{selectedEvent.hour && selectedEvent.date ? moment(`${selectedEvent.date} ${selectedEvent.hour}`, 'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm').toString() : ''}</Modal.Title>
       </Modal.Header>

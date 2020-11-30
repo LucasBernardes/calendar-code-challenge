@@ -46,7 +46,6 @@ function events(state =  INITIAL_STATE, action) {
     case 'REMOVE_EVENT':
       return {...state, data: action.data}
     case 'ADD_NEW_EVENT':
-      console.log(action.data)
       return {...state, data: {...action.data}}
     default:
       return state;

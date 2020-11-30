@@ -5,7 +5,6 @@
     position: absolute;
     top: 59px;
     bottom: 0;
-    /* height: calc(100% - 170px); */
     min-width:600px;
 }
 

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import EventDisplayer from './EventDisplayer';
-import './styles.css';
+import './../styles.css';
 import CreateEvent from './CreatEvent';
 
 

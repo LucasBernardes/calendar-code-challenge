@@ -35,11 +35,6 @@ function CreateEvent(props) {
       setValidated(true);
     }
     else {
-      console.log(newEventData.title
-        ,newEventData.title.length < 30
-        ,newEventData.city
-        ,moment(newEventData.date, 'DD/MM/YYYY', true).isValid()
-        ,moment(newEventData.hour, 'HH:mm', true).isValid())
       if (
         newEventData.title
         && newEventData.title.length < 30
@@ -54,8 +49,8 @@ function CreateEvent(props) {
             type: 'REMOVE_EVENT',
             data: newDate,
           })
-          
-          let newEvent = {...events}
+
+          let newEvent = { ...events }
           const data = {
             [newEventData.date]: [{
               title: newEventData.title,
@@ -77,14 +72,14 @@ function CreateEvent(props) {
             return null;
           });
           if (isEmptyDate) {
-            newEvent = {...events, ...data}
+            newEvent = { ...events, ...data }
           }
           dispatch({
             type: 'ADD_NEW_EVENT',
             data: newEvent,
           })
         } else {
-          let newEvent = {...events}
+          let newEvent = { ...events }
           const data = {
             [newEventData.date]: [{
               title: newEventData.title,
@@ -106,7 +101,7 @@ function CreateEvent(props) {
             return null;
           });
           if (isEmptyDate) {
-            newEvent = {...events, ...data}
+            newEvent = { ...events, ...data }
           }
           dispatch({
             type: 'ADD_NEW_EVENT',
