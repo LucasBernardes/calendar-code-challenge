@@ -39,6 +39,8 @@ function Calendar() {
     }
     if (auxMonth.length < 35) {
       auxMonth = [...auxMonth, ...nextMonth.slice(0, 35 - auxMonth.length)]
+    } else if (auxMonth.length > 35){
+      auxMonth = [...auxMonth, ...nextMonth.slice(0, 42 - auxMonth.length)]
     }
     setCurrentMonthDates(auxMonth)
   }, [lastMonth])
