@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Tooltip, OverlayTrigger, Button, Badge } from 'react-bootstrap';
-import Alert from './../Alert';
 import moment from 'moment';
 import Modal from '../Modal';
 import './../styles.css';
@@ -33,9 +32,7 @@ function Calendar() {
     let auxMonth = [...currentMonthDates];
     const date = auxMonth[0].day();
     if (date > 0) {
-      console.log(date)
       auxMonth = [...lastMonth.slice(-date), ...currentMonthDates]
-      console.log(auxMonth.lenght)
     }
     if (auxMonth.length < 35) {
       auxMonth = [...auxMonth, ...nextMonth.slice(0, 35 - auxMonth.length)]
@@ -141,13 +138,14 @@ function Calendar() {
         addNewEventVisible={addNewEventVisible}
       />
 
-      <div className="calendar-wrapper">
+      <div className={`calendar-wrapper ${currentMonthDates.length > 35 && 'exception-month-42-lines'}`}>
+      {/* <div className={`${currentMonthDates.length > 35 && 'exception-month-42-lines'}`}> */}
         {
           currentMonthDates.map((date, index) => {
             const formatedDate = date.format('DD/MM/YYYY');
             return (
               <div onClick={() => handleDateClick(date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
-                <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
+                <div className={`${(date.day() === 0 || date.day() === 6) || date.format('MMM') !== currentMonth.format("MMM")? 'weekend' : 'calendar-item'}`}>
                   <div className="event-date-number">
                     {date.date()}
                     {events[formatedDate] && events[formatedDate].length > 0 && (
