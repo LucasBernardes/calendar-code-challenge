@@ -7,12 +7,12 @@ import { radios } from './static';
 import EventDisplayer from './EventDisplayer';
 import './styles.css';
 import InputGroup from 'react-bootstrap/InputGroup';
-import axios from "axios";
+
 import CreateEvent from './CreatEvent';
 
 
 function AddEventModal(props) {
-  const { setAddNewEventVisible } = props;
+  const { setAddNewEventVisible, addNewEventVisible } = props;
   const selectedDate = useSelector(state => state.selectedDate);
   const selectedEvent = useSelector(state => state.selectedEvent);
   const modalMode = useSelector(state => state.modalMode); 
@@ -28,7 +28,7 @@ function AddEventModal(props) {
       case('VIEW_EVENT_MODAL_STYLE'):
         return(<EventDisplayer selectedEvent={selectedEvent} hideModalEvent={hideModalEvent}/>);
       case('CREATE_EDIT_MODAL_STYLE'):
-        return(<CreateEvent selectedDate={selectedDate} setAddNewEventVisible={setAddNewEventVisible}/>);
+        return(<CreateEvent selectedDate={selectedDate} addNewEventVisible={addNewEventVisible} setAddNewEventVisible={setAddNewEventVisible}/>);
       default:
         return null;
     }
@@ -44,7 +44,7 @@ function AddEventModal(props) {
   // }
   
   return (
-    <Modal show={props.addNewEventVisible} onHide={hideModalEvent} centered>
+    <Modal show={addNewEventVisible} onHide={hideModalEvent} centered>
       <ModalContentSelector />   
     </Modal>
   );

@@ -20,30 +20,6 @@ function CreateEvent(props) {
       if (selectedDate && selectedDate.date) {
         setDate(selectedDate.date)
       }
-      // if (selecte)
-
-
-      // if (true) {
-        // const options = {
-        //   method: 'GET',
-        //   url: 'https://community-open-weather-map.p.rapidapi.com/forecast/daily',
-        //   params: {
-        //     q: 'maringa,brazil',
-        //     cnt: '16',
-        //     units: 'metric'
-        //   },
-        //   headers: {
-        //     'x-rapidapi-key': '99911a1476msh22ab3d3cde144f0p107d38jsna51a006db844',
-        //     'x-rapidapi-host': 'community-open-weather-map.p.rapidapi.com'
-        //   }
-        // };
-        
-        // axios.request(options).then(function (response) {
-        //   console.log(response.data);
-        // }).catch(function (error) {
-        //   console.error(error);
-        // });
-      // }
     }
     
   },[props.addNewEventVisible])
