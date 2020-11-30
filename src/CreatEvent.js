@@ -19,7 +19,6 @@ function CreateEvent(props) {
   const modalMode = useSelector(state => state.modalMode);
   const events = useSelector(state => state.data);
   const [validated, setValidated] = useState(false);
-  console.log(selectedEvent)
   const [newEventData, setNewEventData] = useState(modalMode === 'EDIT_MODAL_STYLE' ? (
     selectedEvent
   ) : (
@@ -28,7 +27,6 @@ function CreateEvent(props) {
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-    console.log('valide:', form.checkValidity)
     event.preventDefault();
 
     if (form.checkValidity() === false) {
@@ -56,30 +54,63 @@ function CreateEvent(props) {
             type: 'REMOVE_EVENT',
             data: newDate,
           })
+          
+          let newEvent = {...events}
+          const data = {
+            [newEventData.date]: [{
+              title: newEventData.title,
+              city: newEventData.city,
+              date: newEventData.date,
+              hour: newEventData.hour,
+              radioValue: newEventData.radioValue
+            }],
+          };
+          let isEmptyDate = true;
+          Object.keys(newEvent).map(element => {
+            if (element === newEventData.date) {
+              newEvent[element].push(data[element][0])
+              newEvent[element].sort(function (a, b) {
+                return a.hour.localeCompare(b.hour);
+              });
+              isEmptyDate = false;
+            }
+            return null;
+          });
+          if (isEmptyDate) {
+            newEvent = {...events, ...data}
+          }
           dispatch({
             type: 'ADD_NEW_EVENT',
-            data: {
-              [newEventData.date]: [{
-                title: newEventData.title,
-                city: newEventData.city,
-                date: newEventData.date,
-                hour: newEventData.hour,
-                radioValue: newEventData.radioValue
-              }],
-            },
+            data: newEvent,
           })
         } else {
+          let newEvent = {...events}
+          const data = {
+            [newEventData.date]: [{
+              title: newEventData.title,
+              city: newEventData.city,
+              date: newEventData.date,
+              hour: newEventData.hour,
+              radioValue: newEventData.radioValue
+            }],
+          };
+          let isEmptyDate = true;
+          Object.keys(newEvent).map(element => {
+            if (element === newEventData.date) {
+              newEvent[element].push(data[element][0])
+              newEvent[element].sort(function (a, b) {
+                return a.hour.localeCompare(b.hour);
+              });
+              isEmptyDate = false;
+            }
+            return null;
+          });
+          if (isEmptyDate) {
+            newEvent = {...events, ...data}
+          }
           dispatch({
             type: 'ADD_NEW_EVENT',
-            data: {
-              [newEventData.date]: [{
-                title: newEventData.title,
-                city: newEventData.city,
-                date: newEventData.date,
-                hour: newEventData.hour,
-                radioValue: newEventData.radioValue
-              }],
-            },
+            data: newEvent,
           })
         }
         setValidated(false);
@@ -102,7 +133,6 @@ function CreateEvent(props) {
       </Modal.Header>
       <Container fluid>
         <Row className="justify-content-md-center mt-1" style={{ justifyContent: 'center' }}>
-          {console.log(newEventData)}
           <h1>
             <Badge variant="secondary" style={{ backgroundColor: colors[newEventData.radioValue].color }}>
               {moment(`${newEventData.date ? newEventData.date : ''} ${newEventData.hour ? newEventData.hour : ''}`, 'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm')}
@@ -156,7 +186,6 @@ function CreateEvent(props) {
           </Form.Group>
           <Form.Group as={Col} md="3" controlId="validationCustom05">
             <Form.Label>Hour</Form.Label>
-            {console.log(moment(newEventData.hour, 'HH:mm', true))}
             <Form.Control
               value={newEventData.hour}
               isInvalid={newEventData.hour && !moment(newEventData.hour, 'HH:mm', true).isValid()}

@@ -83,7 +83,6 @@ function Calendar() {
       <div className="calendar-event-wrapper">
         {
           events && events[currentDate] && events[currentDate].map((event, index) => {
-            console.log(event)
             return (
               <div key={event.hour} className="calendar-event-item" onClick={(e) => handleEventClick(e, date.format('DD/MM/YYYY'), index)}>
                 <span className="event-circle" style={{ backgroundColor: colors[event.radioValue].color }}></span>
@@ -172,7 +171,6 @@ function Calendar() {
       <div className="calendar-wrapper">
         {
           currentMonthDates.map((date, index) => {
-            console.log(currentMonthDates)
             const formatedDate = date.format('DD/MM/YYYY');
             return (
               <div onClick={() => handleDateClick(date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>

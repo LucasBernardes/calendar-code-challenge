@@ -46,24 +46,8 @@ function events(state =  INITIAL_STATE, action) {
     case 'REMOVE_EVENT':
       return {...state, data: action.data}
     case 'ADD_NEW_EVENT':
-      const date = Object.keys(action.data)[0];
-      const event = action.data[date];
-      let isEmptyDate = true;
-      Object.keys(state.data).map(element => {
-        if (element === date) {
-          state.data[element].push(action.data[element][0])
-          console.log(state.data)
-          state.data[element].sort(function (a, b) {
-            return a.hour.localeCompare(b.hour);
-          });
-          isEmptyDate = false;
-        }
-      });
-      if (isEmptyDate) {
-        console.log('tem nada nesse dia', action.data)
-        return {...state, data: { ...state.data, ...action.data }}
-      }
-      return state
+      console.log(action.data)
+      return {...state, data: {...action.data}}
     default:
       return state;
   }
