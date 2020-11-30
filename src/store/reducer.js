@@ -1,21 +1,21 @@
 const INITIAL_STATE = {
   data: {
     '11/11/2020': [{
-      title: 'Consulta médico',
+      title: 'Take car to car-wash',
       hour: '13:00',
       city: 'Sidney',
-      radioValue: '1'
+      radioValue: '3'
     }],
     '12/11/2020': [{
-      title: 'Lavar carro',
+      title: 'Air plante trip',
       hour: '18:00',
       city: 'London',
       radioValue: '0'
     },{
-      title: 'Lavar carro2',
+      title: 'Walk the dog out',
       hour: '18:20',
-      city: 'London2',
-      radioValue: '1'
+      city: 'London',
+      radioValue: '0'
     }],
   },
   modalMode: '',

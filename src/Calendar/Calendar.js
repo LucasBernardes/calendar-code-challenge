@@ -137,14 +137,16 @@ function Calendar() {
         setAddNewEventVisible={setAddNewEventVisible}
         addNewEventVisible={addNewEventVisible}
       />
-
-      <div className={`calendar-wrapper ${currentMonthDates.length > 35 && 'exception-month-42-lines'}`}>
-      {/* <div className={`${currentMonthDates.length > 35 && 'exception-month-42-lines'}`}> */}
+      <div className="calendar-wrapper">
         {
           currentMonthDates.map((date, index) => {
             const formatedDate = date.format('DD/MM/YYYY');
             return (
-              <div onClick={() => handleDateClick(date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
+              <div
+                onClick={() => handleDateClick(date.format('DD/MM/YYYY'), index)}
+                className={`calendar-item-wrapper ${currentMonthDates.length > 35 && 'exception-month-42-lines'}`}
+                key={date.format('L')}
+              >
                 <div className={`${(date.day() === 0 || date.day() === 6) || date.format('MMM') !== currentMonth.format("MMM")? 'weekend' : 'calendar-item'}`}>
                   <div className="event-date-number">
                     {date.date()}
