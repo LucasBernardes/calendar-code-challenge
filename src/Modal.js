@@ -13,7 +13,6 @@ function AddEventModal(props) {
 
   const hideModalEvent = () => {
     props.setAddNewEventVisible(false)
-    // cleanField()
   }
 
   const ModalContentSelector = () => {

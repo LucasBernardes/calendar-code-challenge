@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import Calendar from './Calendar';
+import Calendar from './Calendar/Calendar';
 import { Provider } from 'react-redux'
 import store from './store';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,20 +11,6 @@ function App() {
       <Provider store={store}>
         <Calendar />
       </Provider>
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
     </div>
   );
 }

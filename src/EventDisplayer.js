@@ -5,11 +5,11 @@ import moment from 'moment';
 import axios from "axios";
 
 
-function EventDisplayer(props) { 
+function EventDisplayer(props) {
   const { selectedEvent, hideModalEvent, addNewEventVisible } = props;
   const [weather, setWeather] = useState([])
   const [isLoadingWeaher, setIsLoadingWeaher] = useState(false)
-  const events = useSelector(state => state.data); 
+  const events = useSelector(state => state.data);
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -39,16 +39,10 @@ function EventDisplayer(props) {
       setWeather('Error finding weather')
       setIsLoadingWeaher(false)
     });
-  },[])
-
-  // useEffect(() => {
-  //   if (!addNewEventVisible) {
-  //     setWeather([])
-  //   }
-  // },[addNewEventVisible])
+  }, [])
 
   const handleDeleteEvent = () => {
-    const newDate = {...events};
+    const newDate = { ...events };
     newDate[selectedEvent.date].splice(selectedEvent.index, 1)
     dispatch({
       type: 'REMOVE_EVENT',
@@ -66,13 +60,6 @@ function EventDisplayer(props) {
   }
 
   const HandleWeather = () => {
-
-    console.log('weatjer', weather)
-    // if (weather === 'Error finding weather') {
-    //   return(
-    //     <>
-    //   )
-    // }
     if (isLoadingWeaher) {
       return (
         <Alert variant="primary">
@@ -91,59 +78,55 @@ function EventDisplayer(props) {
         return null
       })
 
-      return(
-        // <Card.Text>
-           
-          <Accordion>
-           <Card>
+      return (
+        <Accordion>
+          <Card>
             <Card.Header>
-           <Accordion.Toggle as={Button} variant="link" eventKey="0">
-              {`Weather for Next 16 Days`}
-            </Accordion.Toggle>
+              <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                {`Weather for Next 16 Days`}
+              </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
               <ListGroup>
-              {
-                listWeather.map((weatherList, index) => {
-                  const day = moment().add(index, 'days').format('DD/MM/YYYY');
-                  return (
-                    <div key={index}>
-                      <ListGroup.Item >
-                        {`${day} - ${weatherList.join(', ')}`}
-                        {selectedEvent.date ===  day ? (
-                          <>
-                            {' '}<Badge variant="primary">Your event day!</Badge>
-                          </>
-                        ) : null }
-                      </ListGroup.Item>
-                    </div>
-                  );
-                })
-              }
+                {
+                  listWeather.map((weatherList, index) => {
+                    const day = moment().add(index, 'days').format('DD/MM/YYYY');
+                    return (
+                      <div key={index}>
+                        <ListGroup.Item >
+                          {`${day} - ${weatherList.join(', ')}`}
+                          {selectedEvent.date === day ? (
+                            <>
+                              {' '}<Badge variant="primary">Your event day!</Badge>
+                            </>
+                          ) : null}
+                        </ListGroup.Item>
+                      </div>
+                    );
+                  })
+                }
               </ListGroup>
             </Accordion.Collapse>
-            </Card>
-          </Accordion>
-        // </Card.Text>
+          </Card>
+        </Accordion>
       )
-      // console.log(listWeather)
     }
     return (
       <Alert variant="warning">
         No weather found for this location
       </Alert>
     );
-    
 
 
-    
+
+
   }
 
   return (
     <>
       {console.log(selectedEvent)}
       <Modal.Header className="header-color" closeButton>
-      <Modal.Title>{selectedEvent.hour && selectedEvent.date ? moment(`${selectedEvent.date} ${selectedEvent.hour}`,'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm').toString() : ''}</Modal.Title>
+        <Modal.Title>{selectedEvent.hour && selectedEvent.date ? moment(`${selectedEvent.date} ${selectedEvent.hour}`, 'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm').toString() : ''}</Modal.Title>
       </Modal.Header>
       <Card>
         <Card.Body>
@@ -151,7 +134,7 @@ function EventDisplayer(props) {
           <Card.Subtitle className="mb-2 text-muted">{selectedEvent.city && selectedEvent.city}</Card.Subtitle>
           <HandleWeather />
           <Button onClick={handleEditEvent} variant="primary mt-4">Edit</Button>{' '}
-          <Button onClick={handleDeleteEvent}  variant="danger mt-4">Delete</Button>
+          <Button onClick={handleDeleteEvent} variant="danger mt-4">Delete</Button>
         </Card.Body>
       </Card>
     </>

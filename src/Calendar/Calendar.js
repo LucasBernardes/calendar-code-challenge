@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Alert from './Alert';
+import { Tooltip, OverlayTrigger, Button} from 'react-bootstrap';
+import Alert from './../Alert';
 import moment from 'moment';
-import Modal from './Modal';
-import './styles.css';
-import { colors } from './static';
+import Modal from '../Modal';
+import './../styles.css';
+import { colors } from '../static';
 
 function Calendar() {
   const events = useSelector(state => state.data);
@@ -88,9 +89,8 @@ function Calendar() {
                 <span className="event-circle" style={{ backgroundColor: colors[event.radioValue].color }}></span>
                 <span className="event-title">
                   {event.title && event.title}
-                  {/* Nome do evento */}
+
                 </span>
-                {/* <span className="event-hour">{event.hour && event.hour}</span> */}
                 <span className="event-hour">{event.hour && event.hour}</span>
               </div>
             );
@@ -131,32 +131,39 @@ function Calendar() {
   }
 
   const handleDateClick = (date) => {
-    console.log('chamei date')
     dispatch({
       type: 'SELECTED_DATE',
       data: { date },
     })
-    console.log(date)
     setSelectedIndex(date)
     setAddNewEventVisible(true)
   }
 
+  const handleRemoveAllClick = (e, date) => {
+    // onst newDate = { ...events };
+    //       newDate[selectedEvent.date].splice(selectedEvent.index, 1)
+    const removed = {...events}
+    removed[date] = [];
+    e.stopPropagation();
+    dispatch({
+      type: 'REMOVE_EVENT',
+      data: { ...removed },
+    })
+  }
+
   const handleEventClick = (e, date, index) => {
-    console.log('chamei event')
     e.stopPropagation();
     dispatch({
       type: 'SELECTED_EVENT',
       data: {...events[date][index], index, date},
     })
-
-    setAddNewEventVisible(true) 
+    setAddNewEventVisible(true)
   }
 
   return (
     <>
       <MonthChooserHeader />
       <HeaderCalendar />
-      {/* <Alert /> */}
       <Modal
         setAddNewEventVisible={setAddNewEventVisible}
         addNewEventVisible={addNewEventVisible}
@@ -165,12 +172,26 @@ function Calendar() {
       <div className="calendar-wrapper">
         {
           currentMonthDates.map((date, index) => {
+            console.log(currentMonthDates)
+            const formatedDate = date.format('DD/MM/YYYY');
             return (
               <div onClick={() => handleDateClick(date.format('DD/MM/YYYY'), index)} className="calendar-item-wrapper" key={date.format('L')}>
-              {/* <div className="calendar-item-wrapper" key={date.format('L')}> */}
                 <div className={`${(date.day() === 0 || date.day() === 6) ? 'weekend' : 'calendar-item'}`}>
                   <div className="event-date-number">
                     {date.date()}
+                    {/* {date.} */}
+                    {events[formatedDate] && events[formatedDate].length > 0 && (
+                      <OverlayTrigger
+                        key="top"
+                        overlay={
+                          <Tooltip id={`tooltip-top`}>
+                            Remove all events
+                          </Tooltip>
+                        }
+                      >
+                        <Button onClick={(e) => handleRemoveAllClick(e, formatedDate)}variant="secondary" style={{ float: 'right', padding: 0, width: 15, marginTop: 2, fontSize: 10 }} >x</Button>
+                      </OverlayTrigger>
+                    )}
                   </div>
                   {RenderEvents(date)}
                 </div>

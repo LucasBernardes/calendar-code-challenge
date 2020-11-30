@@ -11,6 +11,11 @@ const INITIAL_STATE = {
       hour: '18:00',
       city: 'London',
       radioValue: '0'
+    },{
+      title: 'Lavar carro2',
+      hour: '18:20',
+      city: 'London2',
+      radioValue: '1'
     }],
   },
   modalMode: '',
@@ -40,12 +45,6 @@ function events(state =  INITIAL_STATE, action) {
       }
     case 'REMOVE_EVENT':
       return {...state, data: action.data}
-    // case 'REMOVE_ALL_EVENTS_FROM_DAY':
-    //   console.log(action.data)
-    //   const dateString = action.data.date;
-    //   const index = action.data.index;
-    //   state.data[dateString].splice(index, 1);
-    //   return state
     case 'ADD_NEW_EVENT':
       const date = Object.keys(action.data)[0];
       const event = action.data[date];
