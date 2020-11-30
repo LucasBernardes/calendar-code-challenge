@@ -15,15 +15,55 @@ function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(moment().add(0, 'months'))
   const [selectedIndex, setSelectedIndex] = useState(null);
   const dispatch = useDispatch();
-  
-  // const [lastMonth, setLastMonth] = useState(Array.from({length: moment().add(monthOffset - 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset - 1,'months').startOf('month').add(i, 'days')))
+  const [lastMonth, setLastMonth] = useState(Array.from({length: moment().add(monthOffset - 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset - 1,'months').startOf('month').add(i, 'days')))
   const [nextMonth, setNextMonth] = useState(Array.from({length: moment().add(monthOffset + 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset + 1,'months').startOf('month').add(i, 'days')))
   const [currentMonthDates, setCurrentMonthDates] = useState(Array.from({length: moment().add(monthOffset,'months').daysInMonth()}, (x, i) => moment().add(monthOffset,'months').startOf('month').add(i, 'days')))
-  // const lastMonth = moment().add(monthOffset - 1, 'months');
-  // const nextMonth = moment().add(monthOffset + 1, 'months');
-  // const currentMonthDates = new Array(currentMonth.daysInMonth()).fill(null).map((x, i) => currentMonth.startOf('month').add(i, 'days'));
   const weekArray = moment.weekdays()
 
+  useEffect(() => {
+    console.log(monthOffset)
+    setCurrentMonthDates(Array.from({length: moment().add(monthOffset,'months').daysInMonth()}, (x, i) => moment().add(monthOffset,'months').startOf('month').add(i, 'days')))
+    setNextMonth(Array.from({length: moment().add(monthOffset + 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset + 1,'months').startOf('month').add(i, 'days')))
+    setLastMonth(Array.from({length: moment().add(monthOffset - 1,'months').daysInMonth()}, (x, i) => moment().add(monthOffset - 1,'months').startOf('month').add(i, 'days')))
+    setCurrentMonth(moment().add(monthOffset, 'months'))
+    console.log(currentMonthDates)
+  },[monthOffset])
+
+
+  useEffect(() => {
+    console.log(currentMonthDates)
+    
+    let auxMonth = [...currentMonthDates];
+    const date = auxMonth[0].day();
+    if(date > 0) {
+      // for (var i = 0; i < date; i++) {
+      console.log(date)
+      auxMonth = [...lastMonth.slice(-date) , ...currentMonthDates]
+      console.log(auxMonth.lenght)
+      
+      // currentMonthDates.unshift(currentMonthDates[0].add(i - 1, 'days'))
+    }
+    console.log(date)
+    console.log(auxMonth.length)
+    if (auxMonth.length < 35) {
+      auxMonth = [...auxMonth, ...nextMonth.slice(0, 35 - auxMonth.length)]
+    }
+    // while(auxMonth.length < 35) {
+    //   auxMonth= [...auxMonth, ...[auxMonth[auxMonth.length - 1].add(1, 'days')]];
+    // }
+    setCurrentMonthDates(auxMonth)
+  },[lastMonth])
+
+  // useEffect(() => {
+  //   const date = currentMonthDates[0].day();
+  //   if(date > 0) {
+  //     // for (var i = 0; i < date; i++) {
+  //       console.log(date)
+  //       setCurrentMonthDates([...lastMonth.slice(-date) , ...currentMonthDates])
+  //       // currentMonthDates.unshift(currentMonthDates[0].add(i - 1, 'days'))
+  //     // }
+  //   }
+  // },[currentMonthDates])
 
   useEffect(() => {
     if (!addNewEventVisible) {
@@ -34,13 +74,6 @@ function Calendar() {
     }
   },[addNewEventVisible])
 
-  useEffect(() => {
-    console.log(events)
-  },[events])
-
-  useEffect(() => {
-    console.log(selectedDate)
-  },[selectedDate])
   // useEffect(() => {
   //   currentMonthDates = [];
   // },[monthOffset])
