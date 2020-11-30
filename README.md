@@ -1,4 +1,4 @@
-# Front-end Javascript Challenge
+# Front-end Javascript Challenge - Inspired by Icloud Calendar
 
 ## Mandatory
 ✅ Ability to add a new "reminder" (max 30 chars) for a user entered day and time. Also,

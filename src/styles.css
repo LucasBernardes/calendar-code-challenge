@@ -23,6 +23,11 @@
     margin-top: 2px;
 }
 
+.month-button {
+    cursor: pointer;
+    /* font-size: 20px; */
+}
+
 .calendar-item {
     display: flex;
     flex-direction: column;
